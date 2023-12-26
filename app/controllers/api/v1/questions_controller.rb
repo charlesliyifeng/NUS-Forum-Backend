@@ -1,6 +1,5 @@
 class Api::V1::QuestionsController < ApplicationController
   before_action :set_question, only: %i[ show update destroy ]
-  skip_before_action :verify_authenticity_token
 
   # GET /questions
   def index
@@ -37,9 +36,6 @@ class Api::V1::QuestionsController < ApplicationController
   # DELETE /questions/1
   def destroy
     @question.destroy
-
-    respond_to do |format|
-      format.json { render json: Post.all, status: :ok }
   end
 
   private
