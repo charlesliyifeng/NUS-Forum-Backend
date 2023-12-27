@@ -4,7 +4,6 @@ class Api::V1::QuestionsController < ApplicationController
   # GET /questions
   def index
     @questions = Question.all
-
     render json: @questions
   end
 
@@ -18,7 +17,7 @@ class Api::V1::QuestionsController < ApplicationController
     @question = Question.new(question_params)
 
     if @question.save
-      render json: @question, status: :created, location: @question
+      render json: @question, status: :created
     else
       render json: @question.errors, status: :unprocessable_entity
     end
@@ -36,16 +35,20 @@ class Api::V1::QuestionsController < ApplicationController
   # DELETE /questions/1
   def destroy
     @question.destroy
+    head :no_content
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_question
       @question = Question.find(params[:id])
+      unless @question
+        render json: { error: 'Thread not found' }, status: :not_found
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :id, :author, :votes, :answers, :accepted, :views, :tags)
+      params.require(:question).permit(:title, :body, :author, :votes, :answers, :accepted, :views, :tags)
     end
 end
