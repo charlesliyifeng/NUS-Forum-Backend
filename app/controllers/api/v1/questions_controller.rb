@@ -43,7 +43,7 @@ class Api::V1::QuestionsController < ApplicationController
     def set_question
       @question = Question.find(params[:id])
       unless @question
-        render json: { error: 'Thread not found' }, status: :not_found
+        render json: { error: 'Question not found' }, status: :not_found
       end
     end
 
