@@ -10,13 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_25_102303) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_29_230208) do
+  create_table "answers", force: :cascade do |t|
+    t.text "body"
+    t.string "author"
+    t.integer "votes"
+    t.integer "accepted"
+    t.integer "question_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.string "author"
     t.integer "votes"
-    t.integer "answers"
+    t.integer "answers_count"
     t.integer "accepted"
     t.integer "views"
     t.string "tags"
@@ -24,4 +35,5 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_25_102303) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "answers", "questions"
 end

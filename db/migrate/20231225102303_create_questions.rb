@@ -5,7 +5,7 @@ class CreateQuestions < ActiveRecord::Migration[7.1]
       t.text :body
       t.string :author
       t.integer :votes
-      t.integer :answers
+      t.integer :answers_count
       t.integer :accepted
       t.integer :views
       t.string :tags
@@ -13,5 +13,4 @@ class CreateQuestions < ActiveRecord::Migration[7.1]
       t.timestamps
     end
   end
-
 end

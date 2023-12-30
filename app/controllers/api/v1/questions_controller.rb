@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < ApplicationController
-  before_action :set_question, only: %i[ show update destroy ]
+  before_action :set_question, only: %i[ show update destroy get_answers ]
 
   # GET /questions
   def index
@@ -10,6 +10,11 @@ class Api::V1::QuestionsController < ApplicationController
   # GET /questions/1
   def show
     render json: @question
+  end
+
+  # GET /questions/1/get_answers
+  def get_answers
+    render json: Answer.where(question_id: @question.id)
   end
 
   # POST /questions
