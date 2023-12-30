@@ -54,6 +54,6 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :author, :votes, :answers, :accepted, :views, :tags)
+      params.require(:question).permit(:title, :body, :author, :votes, :answers_count, :accepted, :views, :tags)
     end
 end
