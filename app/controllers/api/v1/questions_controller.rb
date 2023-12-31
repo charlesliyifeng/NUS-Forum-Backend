@@ -14,7 +14,7 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions/1/get_answers
   def get_answers
-    render json: Answer.where(question_id: @question.id)
+    render json: Answer.where(question_id: @question.id).order(votes: :desc, accepted: :desc)
   end
 
   # POST /questions
