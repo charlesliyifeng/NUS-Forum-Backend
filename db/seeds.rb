@@ -9,17 +9,18 @@
 #   end
 
 5.times do |i|
+    count = rand(1..5)
     question = Question.create(
       title: "test #{i+1}",
       body: "This is the body of test #{i+1}!",
       author: "admin #{i+1}",
       votes: i,
-      answers_count: 3,
+      answers_count: count,
       accepted: 0,
       views: i*100000,
       tags: "test #{i+1}, interesting",
     )
-    rand(1..5).times do |j|
+    count.times do |j|
       question.answers.create(
           body: "This is the body of answer #{j+1} in question #{i+1}",
           author: "author #{j+1}",

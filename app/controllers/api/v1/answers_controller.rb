@@ -1,5 +1,6 @@
 class Api::V1::AnswersController < ApplicationController
   before_action :set_answer, only: %i[ show update destroy ]
+  before_action :set_question, only: %i[ create destroy ]
 
   # GET /answers
   def index
@@ -17,6 +18,10 @@ class Api::V1::AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
+      # update answers_count
+      @question.answers_count += 1
+      @question.save
+
       render json: @answer, status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
@@ -35,6 +40,11 @@ class Api::V1::AnswersController < ApplicationController
   # DELETE /answers/1
   def destroy
     @answer.destroy
+
+    # update answers_count
+    @question.answers_count -= 1
+    @question.save
+
     head :no_content
   end
 
@@ -44,6 +54,14 @@ class Api::V1::AnswersController < ApplicationController
       @answer = Answer.find(params[:id])
       unless @answer
         render json: { error: 'Answer not found' }, status: :not_found
+      end
+    end
+
+    def set_question
+      question_id = Answer.find(params[:id]).question_id
+      @question = Question.find_by(id: question_id)
+      unless @question
+        render json: { error: 'Question id of answer not found' }, status: :not_found
       end
     end
 
