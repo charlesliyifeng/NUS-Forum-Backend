@@ -1,6 +1,6 @@
 class Api::V1::AnswersController < ApplicationController
-  before_action :set_answer, only: %i[ show update destroy ]
-  before_action :set_question, only: %i[ create destroy ]
+  before_action :set_answer, only: %i[ show update destroy accept ]
+  before_action :set_question, only: %i[ create destroy accept ]
 
   # GET /answers
   def index
@@ -37,12 +37,30 @@ class Api::V1::AnswersController < ApplicationController
     end
   end
 
+  # PUT /answers/1/accept
+  def accept
+    # toggle accepted
+    if @answer.accepted == 1
+      new_accepted = 0
+    else 
+      new_accepted = 1
+    end
+
+    # update db
+    if (@answer.update_attribute(:accepted, new_accepted) && @question.update_attribute(:accepted, new_accepted))
+      render json: @answer
+    else
+      render json: @answer.errors, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /answers/1
   def destroy
     @answer.destroy
 
-    # update answers_count
+    # update question
     @question.answers_count -= 1
+    @question.accepted = 0
     @question.save
 
     head :no_content

@@ -6,7 +6,11 @@ Rails.application.routes.draw do
           get "get_answers"
         end
       end
-      resources :answers
+      resources :answers do
+        member do
+          put "accept"
+        end
+      end
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
