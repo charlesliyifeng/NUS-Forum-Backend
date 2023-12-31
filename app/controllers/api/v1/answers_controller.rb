@@ -58,7 +58,14 @@ class Api::V1::AnswersController < ApplicationController
     end
 
     def set_question
-      question_id = Answer.find(params[:id]).question_id
+      # differentiate between create and delete request
+      if (params.has_key?(:question_id)) 
+        # create
+        question_id = params[:question_id]
+      else
+        # delete
+        question_id = Answer.find(params[:id]).question_id
+      end
       @question = Question.find_by(id: question_id)
       unless @question
         render json: { error: 'Question id of answer not found' }, status: :not_found
