@@ -1,24 +1,47 @@
-# README
+# NUS-Forum-Backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the backend of NUS-Forum.
 
-Things you may want to cover:
+## TODO list
 
-* Ruby version
+### Backend
+- Database - done
+    - questions
+    - answers
+    - users
+- search function
+- account-based authentication
 
-* System dependencies
+## Getting Started
 
-* Configuration
+### Installation
+1. Install Ruby on Rails
 
-* Database creation
+### Running the app
 
-* Database initialization
+1. Install dependencies for the project by entering this command:
 
-* How to run the test suite
+```bash
+bundle install
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+2. Database creation
 
-* Deployment instructions
+```bash
+rails db:create
+rails db:migrate
+```
 
-* ...
+3. Database initialization
+
+```bash
+rails db:seed
+```
+
+4. Start the app by entering this command:
+
+```bash
+rails s
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
