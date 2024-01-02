@@ -1,6 +1,9 @@
 class Api::V1::AnswersController < ApplicationController
+  skip_before_action :authenticate_user, only: %i[ index show ]
   before_action :set_answer, only: %i[ show update destroy accept ]
   before_action :set_question, only: %i[ create destroy accept ]
+  before_action :check_user_answer_privilage, only: %i[ destroy update ]
+  before_action :check_user_question_privilage, only: %i[ accept ]
 
   # GET /answers
   def index
@@ -56,14 +59,16 @@ class Api::V1::AnswersController < ApplicationController
 
   # DELETE /answers/1
   def destroy
-    @answer.destroy
+    deleted = @answer.destroy
 
     # update question
     @question.answers_count -= 1
     @question.accepted = 0
-    @question.save
-
-    head :no_content
+    if deleted && @question.save
+      render json: { success: "Answer deleted" }, status: :ok
+    else
+      render json: { error: "Something went wrong" }, status: :not_found
+    end
   end
 
   private
@@ -90,8 +95,19 @@ class Api::V1::AnswersController < ApplicationController
       end
     end
 
+    # check user access to answer
+    def check_user_answer_privilage
+      authenticate_target_user(@answer.user_id)
+    end
+
+    # check user access to question (to accept answer)
+    def check_user_question_privilage
+      authenticate_target_user(@question.user_id)
+    end
+
     # Only allow a list of trusted parameters through.
     def answer_params
-      params.require(:answer).permit(:body, :author, :votes, :accepted, :question_id)
+      params.require(:answer).permit(:body, :votes, :accepted, :question_id, :user_id)
     end
+  
 end

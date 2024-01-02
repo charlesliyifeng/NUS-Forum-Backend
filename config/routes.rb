@@ -11,6 +11,8 @@ Rails.application.routes.draw do
           put "accept"
         end
       end
+      resources :users, only: %i[ index show create destroy ]
+      resources :sessions, only: %i[ index create destroy ]
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

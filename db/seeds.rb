@@ -8,24 +8,30 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+user = User.create(
+  name: "Admin",
+  email: "charlesliyifeng@gmail.com",
+  password_digest: "$2a$12$F7EI6a4.0nskajLG9quK5uBUHnk2Wxq9aJ/ezLYpif7y56trHsHIO",
+)
+
 5.times do |i|
-    count = rand(1..5)
-    question = Question.create(
-      title: "test #{i+1}",
-      body: "This is the body of test #{i+1}!",
-      author: "admin #{i+1}",
-      votes: i,
-      answers_count: count,
+  count = rand(1..5)
+  question = user.questions.create(
+    title: "test #{i+1}",
+    body: "This is the body of test #{i+1}!",
+    votes: i,
+    answers_count: count,
+    accepted: 0,
+    views: i*100000,
+    tags: "test #{i+1}, interesting",
+  )
+
+  count.times do |j|
+    question.answers.create(
+      body: "This is the body of answer #{j+1} in question #{i+1}",
+      votes: j,
       accepted: 0,
-      views: i*100000,
-      tags: "test #{i+1}, interesting",
+      user_id: user.id,
     )
-    count.times do |j|
-      question.answers.create(
-          body: "This is the body of answer #{j+1} in question #{i+1}",
-          author: "author #{j+1}",
-          votes: j,
-          accepted: 0,
-      )
-    end
+  end
 end
