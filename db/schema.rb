@@ -27,8 +27,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_31_204859) do
     t.string "title"
     t.text "body"
     t.integer "votes"
-    t.integer "answers_count"
-    t.integer "accepted"
     t.integer "views"
     t.string "tags"
     t.integer "user_id"

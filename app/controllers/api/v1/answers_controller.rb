@@ -1,4 +1,6 @@
 class Api::V1::AnswersController < ApplicationController
+  include JSONAPI::Fetching
+
   skip_before_action :authenticate_user, only: %i[ index show ]
   before_action :set_answer, only: %i[ show update destroy accept ]
   before_action :set_question, only: %i[ create destroy accept ]
@@ -8,12 +10,12 @@ class Api::V1::AnswersController < ApplicationController
   # GET /answers
   def index
     @answers = Answer.all
-    render json: @answers
+    render jsonapi: @answers
   end
 
   # GET /answers/1
   def show
-    render json: @answer
+    render jsonapi: @answer
   end
 
   # POST /answers
@@ -21,10 +23,6 @@ class Api::V1::AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
-      # update answers_count
-      @question.answers_count += 1
-      @question.save
-
       render json: @answer, status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
@@ -50,7 +48,7 @@ class Api::V1::AnswersController < ApplicationController
     end
 
     # update db
-    if (@answer.update_attribute(:accepted, new_accepted) && @question.update_attribute(:accepted, new_accepted))
+    if @answer.update_attribute(:accepted, new_accepted)
       render json: @answer
     else
       render json: @answer.errors, status: :unprocessable_entity
@@ -59,12 +57,7 @@ class Api::V1::AnswersController < ApplicationController
 
   # DELETE /answers/1
   def destroy
-    deleted = @answer.destroy
-
-    # update question
-    @question.answers_count -= 1
-    @question.accepted = 0
-    if deleted && @question.save
+    if @answer.destroy
       render json: { success: "Answer deleted" }, status: :ok
     else
       render json: { error: "Something went wrong" }, status: :not_found
@@ -108,6 +101,10 @@ class Api::V1::AnswersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def answer_params
       params.require(:answer).permit(:body, :votes, :accepted, :question_id, :user_id)
+    end
+
+    def jsonapi_include
+      super & ["user"]
     end
   
 end

@@ -1,4 +1,6 @@
 class Api::V1::QuestionsController < ApplicationController
+  include JSONAPI::Fetching
+  
   skip_before_action :authenticate_user, only: %i[ index show get_answers ]
   before_action :set_question, only: %i[ show update destroy get_answers ]
   before_action :check_user_privilage, only: %i[ update destroy ]
@@ -6,17 +8,17 @@ class Api::V1::QuestionsController < ApplicationController
   # GET /questions
   def index
     @questions = Question.all
-    render json: @questions
+    render jsonapi: @questions
   end
 
   # GET /questions/1
   def show
-    render json: @question
+    render jsonapi: @question
   end
 
   # GET /questions/1/get_answers
   def get_answers
-    render json: Answer.where(question_id: @question.id).order(votes: :desc, accepted: :desc)
+    render jsonapi: Answer.where(question_id: @question.id).order(votes: :desc, accepted: :desc)
   end
 
   # POST /questions
@@ -64,7 +66,10 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :votes, :answers_count, :accepted, :views, :tags, :user_id)
+      params.require(:question).permit(:title, :body, :votes, :views, :tags, :user_id)
     end
-  
+
+    def jsonapi_include
+      super & ["user", "answers"]
+    end
 end
