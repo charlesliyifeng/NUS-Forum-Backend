@@ -1,4 +1,6 @@
 class Api::V1::UsersController < ApplicationController
+  include JSONAPI::Fetching
+
   skip_before_action :authenticate_user, only: %i[ create index ]
   before_action :set_user, only: %i[ show destroy ]
   before_action :check_user_privilage, only: %i[ destroy ]
@@ -11,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users/1 ( Get Profile of 1 user )
   def show
-    render json: { id: @user.id, name: @user.name }
+    render jsonapi: @user
   end
 
   # POST /users ( Create user )
@@ -48,6 +50,6 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:users).permit(:name, :email, :password)
+      params.require(:user).permit(:name, :email, :password)
     end
 end

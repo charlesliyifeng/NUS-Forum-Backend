@@ -13,6 +13,8 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions/1
   def show
+    # update question views
+    @question.update_attribute(:views, @question.views + 1)
     render jsonapi: @question
   end
 

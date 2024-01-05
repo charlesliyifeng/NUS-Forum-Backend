@@ -9,8 +9,10 @@ This is the backend of NUS-Forum.
     - questions
     - answers
     - users
+- account-based authentication - done
+    - add email verification
 - search function
-- account-based authentication
+- fix bugs
 
 ## Getting Started
 

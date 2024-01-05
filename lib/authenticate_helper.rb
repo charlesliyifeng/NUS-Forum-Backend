@@ -4,12 +4,14 @@ module AuthenticateHelper
     email = JsonWebTokenService.decode(request.headers['HTTP_AUTH_TOKEN'])["email"]
     @current_user = User.find_by(email: email)
       
-    render json: { error: "Not Authorized" }, status: 401 unless @current_user
+    render json: { error: "Invalid credentials" }, status: 401 unless @current_user
   end
 
   def authenticate_target_user(target)
     # only allow if user is target user or user is admin
-    render json: {error: "Not Authorized" }, status: 401 unless (@current_user.id == target) # or is an admin
+    if current_user.id != target.to_i
+      render json: {error: "Insufficient privilages"}, status: 401  
+    end
   end
   
   def user_sign_in?

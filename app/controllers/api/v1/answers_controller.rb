@@ -41,10 +41,10 @@ class Api::V1::AnswersController < ApplicationController
   # PUT /answers/1/accept
   def accept
     # toggle accepted
-    if @answer.accepted == 1
-      new_accepted = 0
-    else 
+    if answer_params[:accepted]
       new_accepted = 1
+    else 
+      new_accepted = 0
     end
 
     # update db
