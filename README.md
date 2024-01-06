@@ -11,7 +11,10 @@ This is the backend of NUS-Forum.
     - users
 - account-based authentication - done
     - add email verification
-- search function
+- voting system
+- search
+    - pages with batch queries
+    - sort and filter
 - fix bugs
 
 ## Getting Started

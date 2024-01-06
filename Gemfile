@@ -18,6 +18,9 @@ gem "puma", ">= 5.0"
 gem "jsonapi.rb"
 gem "ransack"
 
+# Data Cleaning
+gem "auto_strip_attributes"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
