@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   include JSONAPI::Fetching
 
-  skip_before_action :authenticate_user, only: %i[ create index ]
+  skip_before_action :authenticate_user, only: %i[ show create index ]
   before_action :set_user, only: %i[ show destroy ]
   before_action :check_user_privilage, only: %i[ destroy ]
   
