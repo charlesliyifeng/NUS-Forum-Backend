@@ -11,7 +11,7 @@ Rails.application.routes.draw do
           put "accept"
         end
       end
-      resources :users, only: %i[ index show create destroy ]
+      resources :users, only: %i[ index show create update destroy ]
       resources :sessions, only: %i[ index create destroy ]
     end
   end

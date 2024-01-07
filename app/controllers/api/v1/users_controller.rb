@@ -2,8 +2,8 @@ class Api::V1::UsersController < ApplicationController
   include JSONAPI::Fetching
 
   skip_before_action :authenticate_user, only: %i[ show create index ]
-  before_action :set_user, only: %i[ show destroy ]
-  before_action :check_user_privilage, only: %i[ destroy ]
+  before_action :set_user, only: %i[ show update destroy ]
+  before_action :check_user_privilage, only: %i[ update destroy ]
   
   # GET /users ( for testing only )
   def index
@@ -23,6 +23,16 @@ class Api::V1::UsersController < ApplicationController
       render json: { success: "User created" }, status: :ok
     else
       render json: { error: @user.errors.messages.map { |msg, desc| msg.to_s + " " + desc[0] }.join(',') }, status: :unauthorized
+    end
+  end
+
+  # PATCH/PUT /users/1 ( Update account details )
+  def update
+    @user.assign_attributes(user_params)
+    if @user.save(validate: false)
+      render json: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
   
