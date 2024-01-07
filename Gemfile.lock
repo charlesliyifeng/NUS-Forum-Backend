@@ -75,6 +75,7 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
+    acts_as_votable (0.14.0)
     auto_strip_attributes (2.6.0)
       activerecord (>= 4.0)
     base64 (0.2.0)
@@ -208,6 +209,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  acts_as_votable
   auto_strip_attributes
   bcrypt (~> 3.1.7)
   bootsnap

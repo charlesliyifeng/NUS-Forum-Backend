@@ -1,7 +1,9 @@
 class User < ApplicationRecord
+  # relationships
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify
 
+  # validation / data cleaning
   has_secure_password
   PASSWORD_REQUIREMENTS = /\A
     (?=.{8,}) # at least 8 chars long
@@ -14,4 +16,7 @@ class User < ApplicationRecord
   validates :password, format: PASSWORD_REQUIREMENTS
   auto_strip_attributes :name, nullify: false, squish: true
   auto_strip_attributes :email
+
+  # voting system
+  acts_as_voter
 end

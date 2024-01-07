@@ -4,11 +4,13 @@ Rails.application.routes.draw do
       resources :questions do
         member do
           get "get_answers"
+          put "vote"
         end
       end
       resources :answers do
         member do
           put "accept"
+          put "vote"
         end
       end
       resources :users, only: %i[ index show create update destroy ]

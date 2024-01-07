@@ -2,8 +2,7 @@ class Api::V1::AnswersController < ApplicationController
   include JSONAPI::Fetching
 
   skip_before_action :authenticate_user, only: %i[ index show ]
-  before_action :set_answer, only: %i[ show update destroy accept ]
-  before_action :set_question, only: %i[ create destroy accept ]
+  before_action :set_answer, only: %i[ show update destroy accept vote ]
   before_action :check_user_answer_privilage, only: %i[ destroy update ]
   before_action :check_user_question_privilage, only: %i[ accept ]
 
@@ -38,9 +37,9 @@ class Api::V1::AnswersController < ApplicationController
     end
   end
 
-  # PUT /answers/1/accept
+  # PATCH/PUT /answers/1/accept
   def accept
-    # toggle accepted
+    # set accepted
     if answer_params[:accepted]
       new_accepted = 1
     else 
@@ -53,6 +52,24 @@ class Api::V1::AnswersController < ApplicationController
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
+  end
+
+  # PATCH/PUT /answers/1/vote
+  def vote
+    user_vote = answer_params[:vote]
+    if current_user.voted_for? @answer
+      # remove previous vote
+      @answer.unliked_by current_user
+    else
+      # cast current vote
+      if user_vote.to_i == 1
+        @answer.liked_by current_user
+      else
+        @answer.downvote_from current_user
+      end
+    end
+
+    render jsonapi: @answer
   end
 
   # DELETE /answers/1
@@ -73,21 +90,6 @@ class Api::V1::AnswersController < ApplicationController
       end
     end
 
-    def set_question
-      # differentiate between create and delete request
-      if (params.has_key?(:question_id)) 
-        # create
-        question_id = params[:question_id]
-      else
-        # delete
-        question_id = Answer.find(params[:id]).question_id
-      end
-      @question = Question.find_by(id: question_id)
-      unless @question
-        render json: { error: 'Question id of answer not found' }, status: :not_found
-      end
-    end
-
     # check user access to answer
     def check_user_answer_privilage
       authenticate_target_user(@answer.user_id)
@@ -100,11 +102,16 @@ class Api::V1::AnswersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def answer_params
-      params.require(:answer).permit(:body, :votes, :accepted, :question_id, :user_id)
+      params.require(:answer).permit(:body, :vote, :accepted, :question_id, :user_id)
     end
 
     def jsonapi_include
       super & ["user"]
     end
-  
+
+    def jsonapi_serializer_params
+      {
+        current_user: current_user
+      }
+    end
 end

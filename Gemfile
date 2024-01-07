@@ -45,6 +45,9 @@ gem "rack-cors"
 # Json Web Tokens
 gem "jwt"
 
+# voting system
+gem "acts_as_votable"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]

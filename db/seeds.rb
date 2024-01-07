@@ -19,7 +19,6 @@ user = User.create!(
   question = user.questions.create!(
     title: "test #{i+1}",
     body: "This is the body of test #{i+1}!",
-    votes: i,
     views: i*100000,
     tags: "test #{i+1},interesting",
   )
@@ -27,7 +26,6 @@ user = User.create!(
   count.times do |j|
     question.answers.create!(
       body: "This is the body of answer #{j+1} in question #{i+1}",
-      votes: j,
       accepted: 0,
       user_id: user.id,
     )

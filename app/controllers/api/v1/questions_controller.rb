@@ -2,7 +2,7 @@ class Api::V1::QuestionsController < ApplicationController
   include JSONAPI::Fetching
   
   skip_before_action :authenticate_user, only: %i[ index show get_answers ]
-  before_action :set_question, only: %i[ show update destroy get_answers ]
+  before_action :set_question, only: %i[ show update destroy get_answers vote ]
   before_action :check_user_privilage, only: %i[ update destroy ]
 
   # GET /questions
@@ -20,7 +20,7 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions/1/get_answers
   def get_answers
-    render jsonapi: Answer.where(question_id: @question.id).order(votes: :desc, accepted: :desc)
+    render jsonapi: Answer.where(question_id: @question.id).order(cached_votes_score: :desc, accepted: :desc)
   end
 
   # POST /questions
@@ -41,6 +41,24 @@ class Api::V1::QuestionsController < ApplicationController
     else
       render json: @question.errors, status: :unprocessable_entity
     end
+  end
+
+  # PATCH/PUT /questions/1/vote
+  def vote
+    user_vote = question_params[:vote]
+    if current_user.voted_for? @question
+      # remove previous vote
+      @question.unliked_by current_user
+    else
+      # cast current vote
+      if user_vote.to_i == 1
+        @question.liked_by current_user
+      else
+        @question.downvote_from current_user
+      end
+    end
+
+    render jsonapi: @question
   end
 
   # DELETE /questions/1
@@ -68,10 +86,16 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :votes, :views, :tags, :user_id)
+      params.require(:question).permit(:title, :body, :vote, :views, :tags, :user_id)
     end
 
     def jsonapi_include
-      super & ["user", "answers"]
+      super & ["user"]
+    end
+
+    def jsonapi_serializer_params
+      {
+        current_user: current_user
+      }
     end
 end

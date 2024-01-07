@@ -1,6 +1,24 @@
 class QuestionSerializer
   include JSONAPI::Serializer
-  attributes :title, :body, :votes, :views, :tags, :created_at, :updated_at
+  attributes :title, :body, :views, :tags, :created_at, :updated_at
+
+  attribute :votes do |question|
+    question.cached_votes_score
+  end
+
+  attribute :user_vote do |question, params|
+    if !!params[:current_user]
+      if params[:current_user].voted_up_on? question
+        1
+      elsif params[:current_user].voted_down_on? question
+        -1
+      else
+        0
+      end
+    else
+      0
+    end
+  end
 
   # store answer count and accepted as meta
   meta do |question|
@@ -11,7 +29,7 @@ class QuestionSerializer
   end
 
   has_many :answers do |question|
-    question.answers.order(votes: :desc, accepted: :desc)
+    question.answers.order(cached_votes_score: :desc, accepted: :desc)
   end
 
   belongs_to :user

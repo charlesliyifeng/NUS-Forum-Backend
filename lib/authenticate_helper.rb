@@ -1,10 +1,18 @@
 module AuthenticateHelper
 
   def authenticate_user
-    email = JsonWebTokenService.decode(request.headers['HTTP_AUTH_TOKEN'])["email"]
-    @current_user = User.find_by(email: email)
-      
     render json: { error: "Invalid credentials" }, status: 401 unless @current_user
+  end
+
+  def load_current_user
+    begin
+      email = JsonWebTokenService.decode(request.headers['HTTP_AUTH_TOKEN'])["email"]
+      @current_user = User.find_by(email: email)
+    rescue JWT::DecodeError
+      puts "############################## no auth_token ####################################"
+    else
+      puts "############################## user signed in ####################################"
+    end
   end
 
   def authenticate_target_user(target)

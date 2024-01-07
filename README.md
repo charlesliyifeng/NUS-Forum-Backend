@@ -5,15 +5,15 @@ This is the backend of NUS-Forum.
 ## TODO list
 
 ### Backend
-- Database - done
+- Database
     - questions
     - answers
     - users
-- account-based authentication - done
+- account-based authentication
     - add email verification
 - voting system
 - search
-    - pages with batch queries
+    - pagination
     - sort and filter
 - fix bugs
 
