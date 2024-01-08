@@ -1,6 +1,5 @@
-class UserSerializer
-  include JSONAPI::Serializer
-  attributes :name, :created_at, :updated_at
+class UserSerializer < ApplicationSerializer
+  attributes :name
 
   has_many :questions
   has_many :answers

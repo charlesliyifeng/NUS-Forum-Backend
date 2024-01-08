@@ -1,6 +1,5 @@
-class AnswerSerializer
-  include JSONAPI::Serializer
-  attributes :body, :created_at, :updated_at
+class AnswerSerializer < ApplicationSerializer
+  attributes :body
 
   # convert accepted to boolean
   attribute :accepted do |answer|

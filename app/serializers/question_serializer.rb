@@ -1,6 +1,5 @@
-class QuestionSerializer
-  include JSONAPI::Serializer
-  attributes :title, :body, :views, :tags, :created_at, :updated_at
+class QuestionSerializer < ApplicationSerializer
+  attributes :title, :body, :views, :tags
 
   attribute :votes do |question|
     question.cached_votes_score
