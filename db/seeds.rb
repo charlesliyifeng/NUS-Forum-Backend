@@ -14,12 +14,12 @@ user = User.create!(
   password: "aA123456789",
 )
 
-5.times do |i|
+1000.times do |i|
   count = rand(1..5)
   question = user.questions.create!(
     title: "test #{i+1}",
     body: "This is the body of test #{i+1}!",
-    views: i*100000,
+    views: 0,
     tags: "test #{i+1},interesting",
   )
 
