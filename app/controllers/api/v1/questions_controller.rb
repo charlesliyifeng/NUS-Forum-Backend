@@ -8,7 +8,35 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions
   def index
-    jsonapi_paginate(Question.all) do |paginated|
+    # search
+    @questions = Question.all
+
+    # filter
+    @questions = case params[:filter]
+    when "Accepted"
+      @questions.has_accepted
+    when "Not Accepted"
+      @questions.has_no_accepted
+    when "No Answer"
+      @questions.has_no_answer
+    else
+      @questions
+    end
+    # sort
+    @questions = case params[:sort]
+    when "Newest"
+      @questions.order(created_at: :desc)
+    when "Votes"
+      @questions.order(cached_votes_score: :desc)
+    when "Answers"
+      @questions.order(answers_count: :desc)
+    when "Views"
+      @questions.order(views: :desc)
+    else
+      @questions
+    end
+    # pagination
+    jsonapi_paginate(@questions) do |paginated|
       render jsonapi: paginated
     end
   end
@@ -22,7 +50,19 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions/count
   def count
-    render json: { count: Question.all.count }
+    @questions = Question.all
+    # filter
+    @questions = case params[:filter]
+    when "Accepted"
+      @questions.has_accepted
+    when "Not Accepted"
+      @questions.has_no_accepted
+    when "No Answer"
+      @questions.has_no_answer
+    else
+      @questions
+    end
+    render json: { count: @questions.count }
   end
 
   # GET /questions/1/get_answers
@@ -52,7 +92,7 @@ class Api::V1::QuestionsController < ApplicationController
 
   # PATCH/PUT /questions/1/vote
   def vote
-    user_vote = question_params[:vote]
+    user_vote = params[:vote]
     if current_user.voted_for? @question
       # remove previous vote
       @question.unliked_by current_user
@@ -93,7 +133,7 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :vote, :views, :tags, :user_id)
+      params.require(:question).permit(:title, :body, :views, :tags, :user_id)
     end
 
     def jsonapi_include

@@ -5,6 +5,7 @@ class CreateQuestions < ActiveRecord::Migration[7.1]
       t.text :body
       t.integer :views
       t.string :tags
+      t.integer :answers_count, default: 0
       t.references :user, foreign_key: true
 
       t.timestamps

@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_07_063925) do
     t.text "body"
     t.integer "views"
     t.string "tags"
+    t.integer "answers_count", default: 0
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

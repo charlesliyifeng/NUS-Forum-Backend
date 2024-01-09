@@ -1,6 +1,6 @@
 class Answer < ApplicationRecord
   # relationships
-  belongs_to :question
+  belongs_to :question, counter_cache: true
   belongs_to :user
 
   # validation / data cleaning

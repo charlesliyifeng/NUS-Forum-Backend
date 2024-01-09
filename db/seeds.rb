@@ -15,11 +15,11 @@ user = User.create!(
 )
 
 1000.times do |i|
-  count = rand(1..5)
+  count = rand(0..5)
   question = user.questions.create!(
     title: "test #{i+1}",
     body: "This is the body of test #{i+1}!",
-    views: 0,
+    views: rand(0..10000),
     tags: "test #{i+1},interesting",
   )
 

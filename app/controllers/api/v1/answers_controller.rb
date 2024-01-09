@@ -97,6 +97,8 @@ class Api::V1::AnswersController < ApplicationController
 
     # check user access to question (to accept answer)
     def check_user_question_privilage
+      question_id = Answer.find(params[:id]).question_id
+      @question = Question.find_by(id: question_id)
       authenticate_target_user(@question.user_id)
     end
 

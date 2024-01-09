@@ -1,8 +1,12 @@
 class QuestionSerializer < ApplicationSerializer
-  attributes :title, :body, :views, :tags
+  attributes :title, :body, :views, :tags, :answers_count
 
   attribute :votes do |question|
     question.cached_votes_score
+  end
+
+  attribute :accepted do |question|
+    question.answers.reduce(false) { |ys, x| ys || (x.accepted == 1) }
   end
 
   attribute :user_vote do |question, params|
@@ -17,14 +21,6 @@ class QuestionSerializer < ApplicationSerializer
     else
       0
     end
-  end
-
-  # store answer count and accepted as meta
-  meta do |question|
-    { 
-      answers_count: question.answers.length,
-      accepted: question.answers.reduce(false) { |ys, x| ys || (x.accepted == 1) }
-    }
   end
 
   has_many :answers do |question|
