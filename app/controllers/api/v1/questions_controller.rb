@@ -80,6 +80,12 @@ class Api::V1::QuestionsController < ApplicationController
 
   # PATCH/PUT /questions/1/vote
   def vote
+    # check if current_user is author of post
+    if @question.user == current_user
+      render json: { error: "Cannot vote for own post" }, status: :forbidden
+      return
+    end
+
     user_vote = params[:vote]
     if current_user.voted_for? @question
       # remove previous vote

@@ -22,7 +22,7 @@ class Api::V1::AnswersController < ApplicationController
     @answer = Answer.new(answer_params)
 
     if @answer.save
-      render json: @answer, status: :created
+      render json: { success: "Answer created" }, status: :created
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class Api::V1::AnswersController < ApplicationController
   # PATCH/PUT /answers/1
   def update
     if @answer.update(answer_params)
-      render json: @answer
+      render json: { success: "Answer updated" }, status: :ok
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -48,7 +48,7 @@ class Api::V1::AnswersController < ApplicationController
 
     # update db
     if @answer.update_attribute(:accepted, new_accepted)
-      render json: @answer
+      render json: { success: "Answer accepted" }, status: :ok
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
@@ -56,6 +56,12 @@ class Api::V1::AnswersController < ApplicationController
 
   # PATCH/PUT /answers/1/vote
   def vote
+    # check if current_user is author of post
+    if @answer.user == current_user
+      render json: { error: "Cannot vote for own post" }, status: :forbidden
+      return
+    end
+
     user_vote = answer_params[:vote]
     if current_user.voted_for? @answer
       # remove previous vote
@@ -69,7 +75,7 @@ class Api::V1::AnswersController < ApplicationController
       end
     end
 
-    render jsonapi: @answer
+    render json: { success: "Vote recorded" }, status: :ok
   end
 
   # DELETE /answers/1
