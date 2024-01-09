@@ -48,6 +48,9 @@ gem "jwt"
 # voting system
 gem "acts_as_votable"
 
+# tagging system
+gem 'acts-as-taggable-on'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]

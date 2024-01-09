@@ -3,8 +3,7 @@ class CreateQuestions < ActiveRecord::Migration[7.1]
     create_table :questions do |t|
       t.string :title
       t.text :body
-      t.integer :views
-      t.string :tags
+      t.integer :views, default: 0
       t.integer :answers_count, default: 0
       t.references :user, foreign_key: true
 

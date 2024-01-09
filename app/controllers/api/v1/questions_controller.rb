@@ -8,6 +8,9 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions
   def index
+    # omit body
+    @include_body = false;
+
     # search
     @questions = Question.all
 
@@ -43,6 +46,8 @@ class Api::V1::QuestionsController < ApplicationController
 
   # GET /questions/1
   def show
+    # include body
+    @include_body = true;
     # update question views
     @question.update_attribute(:views, @question.views + 1)
     render jsonapi: @question
@@ -58,7 +63,7 @@ class Api::V1::QuestionsController < ApplicationController
     @question = Question.new(question_params)
 
     if @question.save
-      render json: @question, status: :created
+      render json: { success: "Question created" }, status: :created
     else
       render json: @question.errors, status: :unprocessable_entity
     end
@@ -67,7 +72,7 @@ class Api::V1::QuestionsController < ApplicationController
   # PATCH/PUT /questions/1
   def update
     if @question.update(question_params)
-      render json: @question
+      render json: { success: "Question updated" }, status: :ok
     else
       render json: @question.errors, status: :unprocessable_entity
     end
@@ -88,7 +93,7 @@ class Api::V1::QuestionsController < ApplicationController
       end
     end
 
-    render jsonapi: @question
+    render json: { success: "Vote recorded" }, status: :ok
   end
 
   # DELETE /questions/1
@@ -116,7 +121,7 @@ class Api::V1::QuestionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def question_params
-      params.require(:question).permit(:title, :body, :views, :tags, :user_id)
+      params.require(:question).permit(:title, :body, :views, :tag_list, :user_id)
     end
 
     def jsonapi_include
@@ -125,7 +130,8 @@ class Api::V1::QuestionsController < ApplicationController
 
     def jsonapi_serializer_params
       {
-        current_user: current_user
+        current_user: current_user,
+        include_body: @include_body
       }
     end
 

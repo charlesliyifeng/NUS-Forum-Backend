@@ -1,5 +1,13 @@
 class QuestionSerializer < ApplicationSerializer
-  attributes :title, :body, :views, :tags, :answers_count
+  attributes :title, :views, :tag_list, :answers_count
+
+  attribute :body do |question, params|
+    if !!params[:include_body]
+      question.body
+    else
+      ""
+    end
+  end
 
   attribute :votes do |question|
     question.cached_votes_score

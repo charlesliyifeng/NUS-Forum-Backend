@@ -75,6 +75,8 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
+    acts-as-taggable-on (10.0.0)
+      activerecord (>= 6.1, < 7.2)
     acts_as_votable (0.14.0)
     auto_strip_attributes (2.6.0)
       activerecord (>= 4.0)
@@ -209,6 +211,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  acts-as-taggable-on
   acts_as_votable
   auto_strip_attributes
   bcrypt (~> 3.1.7)

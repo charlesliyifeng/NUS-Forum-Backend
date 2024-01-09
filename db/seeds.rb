@@ -20,7 +20,6 @@ user = User.create!(
     title: "test #{i+1}",
     body: "This is the body of test #{i+1}!",
     views: rand(0..10000),
-    tags: "test #{i+1},interesting",
   )
 
   count.times do |j|
