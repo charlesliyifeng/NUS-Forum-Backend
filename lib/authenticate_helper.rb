@@ -18,7 +18,7 @@ module AuthenticateHelper
   def authenticate_target_user(target)
     # only allow if user is target user or user is admin
     if current_user.id != target.to_i
-      render json: {error: "Insufficient privilages"}, status: 401  
+      render json: {error: "Insufficient privilages"}, status: 403
     end
   end
   
