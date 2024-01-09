@@ -2,7 +2,7 @@ class Api::V1::QuestionsController < ApplicationController
   include JSONAPI::Fetching
   include JSONAPI::Pagination
   
-  skip_before_action :authenticate_user, only: %i[ index show count get_answers ]
+  skip_before_action :authenticate_user, only: %i[ index show get_answers ]
   before_action :set_question, only: %i[ show update destroy get_answers vote ]
   before_action :check_user_privilage, only: %i[ update destroy ]
 
@@ -46,23 +46,6 @@ class Api::V1::QuestionsController < ApplicationController
     # update question views
     @question.update_attribute(:views, @question.views + 1)
     render jsonapi: @question
-  end
-
-  # GET /questions/count
-  def count
-    @questions = Question.all
-    # filter
-    @questions = case params[:filter]
-    when "Accepted"
-      @questions.has_accepted
-    when "Not Accepted"
-      @questions.has_no_accepted
-    when "No Answer"
-      @questions.has_no_answer
-    else
-      @questions
-    end
-    render json: { count: @questions.count }
   end
 
   # GET /questions/1/get_answers
@@ -144,5 +127,11 @@ class Api::V1::QuestionsController < ApplicationController
       {
         current_user: current_user
       }
+    end
+
+    def jsonapi_meta(resources)
+      pagination = jsonapi_pagination_meta(resources)
+  
+      { pagination: pagination } if pagination.present?
     end
 end
