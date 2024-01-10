@@ -17,4 +17,12 @@ class Question < ApplicationRecord
 
   # tagging system
   acts_as_taggable_on :tags
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["body", "title"] + _ransackers.keys
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    reflect_on_all_associations.map { |a| a.name.to_s } + _ransackers.keys
+  end
 end

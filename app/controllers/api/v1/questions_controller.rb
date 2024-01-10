@@ -1,5 +1,6 @@
 class Api::V1::QuestionsController < ApplicationController
   include JSONAPI::Fetching
+  include JSONAPI::Filtering
   include JSONAPI::Pagination
   
   skip_before_action :authenticate_user, only: %i[ index show get_answers ]
@@ -9,20 +10,16 @@ class Api::V1::QuestionsController < ApplicationController
   # GET /questions
   def index
     # omit body
-    @include_body = false;
-
-    # search
-    #@q = Question.ransack(params[:q])
-    #@questions = @q.result(distinct: true)
+    @include_body = false
     @questions = Question.all
 
     # filter tags
-    if params[:tags] != ""
+    if (!!params[:tags] && params[:tags] != "")
       @questions = @questions.tagged_with(params[:tags].to_s.split(","), :any => true)
     end
 
     # filter
-    @questions = case params[:filter]
+    @questions = case params[:filter_by]
     when "Accepted"
       @questions.has_accepted
     when "Not Accepted"
@@ -45,16 +42,19 @@ class Api::V1::QuestionsController < ApplicationController
     else
       @questions
     end
-    # pagination
-    jsonapi_paginate(@questions) do |paginated|
-      render jsonapi: paginated
+    
+    # pagination and search
+    jsonapi_filter(@questions, ["title", "body"]) do |filtered|
+      jsonapi_paginate(filtered.result) do |paginated|
+        render jsonapi: paginated
+      end
     end
   end
 
   # GET /questions/1
   def show
     # include body
-    @include_body = true;
+    @include_body = true
     # update question views
     @question.update_attribute(:views, @question.views + 1)
     render jsonapi: @question

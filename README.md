@@ -11,8 +11,6 @@ This is the backend of NUS-Forum.
     - users
 - account-based authentication
     - add email verification
-- search
-    - sort and filter
 - fix bugs
 
 ## Getting Started
