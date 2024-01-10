@@ -21,6 +21,8 @@ user = User.create!(
     body: "This is the body of test #{i+1}!",
     views: rand(0..10000),
   )
+  question.tag_list.add("TEST", "#{count}-Answers")
+  question.save
 
   count.times do |j|
     question.answers.create!(

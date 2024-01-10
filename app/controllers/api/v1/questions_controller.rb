@@ -12,7 +12,14 @@ class Api::V1::QuestionsController < ApplicationController
     @include_body = false;
 
     # search
+    #@q = Question.ransack(params[:q])
+    #@questions = @q.result(distinct: true)
     @questions = Question.all
+
+    # filter tags
+    if params[:tags] != ""
+      @questions = @questions.tagged_with(params[:tags].to_s.split(","), :any => true)
+    end
 
     # filter
     @questions = case params[:filter]
