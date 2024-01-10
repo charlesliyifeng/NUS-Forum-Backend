@@ -62,4 +62,10 @@ class Api::V1::UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password)
     end
+
+    def jsonapi_serializer_params
+      {
+        current_user: current_user,
+      }
+    end
 end
