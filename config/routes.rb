@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get 'tags/index'
       resources :questions do
         collection do
           get "count"
@@ -16,7 +17,7 @@ Rails.application.routes.draw do
           put "vote"
         end
       end
-      resources :users, only: %i[ index show create update destroy ]
+      resources :users
       resources :sessions, only: %i[ index create destroy ]
     end
   end
