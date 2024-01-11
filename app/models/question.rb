@@ -11,6 +11,8 @@ class Question < ApplicationRecord
   # validation / data cleaning
   validates :title, presence: true
   validates :body, presence: true
+  auto_strip_attributes :title
+  auto_strip_attributes :body
 
   # voting system
   acts_as_votable cacheable_strategy: :update_columns
@@ -18,6 +20,7 @@ class Question < ApplicationRecord
   # tagging system
   acts_as_taggable_on :tags
 
+  # search system
   def self.ransackable_attributes(auth_object = nil)
     ["body", "title"] + _ransackers.keys
   end

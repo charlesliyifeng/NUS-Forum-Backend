@@ -5,6 +5,7 @@ class Answer < ApplicationRecord
 
   # validation / data cleaning
   validates :body, presence: true
+  auto_strip_attributes :body
 
   # voting system
   acts_as_votable cacheable_strategy: :update_columns
