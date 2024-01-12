@@ -2,6 +2,7 @@ class User < ApplicationRecord
   # relationships
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify
+  has_many :comments, dependent: :nullify
 
   # validation / data cleaning
   has_secure_password

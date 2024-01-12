@@ -25,9 +25,22 @@ user = User.create!(
   question.save
 
   count.times do |j|
-    question.answers.create!(
+    answer = question.answers.create!(
       body: "This is the body of answer #{j+1} in question #{i+1}",
       accepted: 0,
+      user_id: user.id,
+    )
+    rand(0..3).times do |k|
+      answer.comments.create!(
+        body: "This is the body of comment #{k+1} in answer #{j+1}",
+        user_id: user.id,
+      )
+    end
+  end
+
+  rand(0..3).times do |j|
+    question.comments.create!(
+      body: "This is the body of comment #{j+1} in question #{i+1}",
       user_id: user.id,
     )
   end

@@ -2,6 +2,7 @@ class Answer < ApplicationRecord
   # relationships
   belongs_to :question, counter_cache: true
   belongs_to :user
+  has_many :comments, as: :commentable, dependent: :delete_all
 
   # validation / data cleaning
   validates :body, presence: true

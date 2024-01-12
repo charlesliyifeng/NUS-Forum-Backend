@@ -35,5 +35,9 @@ class QuestionSerializer < ApplicationSerializer
     question.answers.order(cached_votes_score: :desc, accepted: :desc)
   end
 
+  has_many :comments do |question|
+    question.comments.order(created_at: :asc)
+  end
+
   belongs_to :user
 end

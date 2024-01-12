@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           put "vote"
         end
       end
+      resources :comments
       resources :users
       resources :sessions, only: %i[ index create destroy ]
     end

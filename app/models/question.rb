@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
   # relationships
   has_many :answers, dependent: :delete_all
+  has_many :comments, as: :commentable, dependent: :delete_all
   belongs_to :user
 
   # scopes

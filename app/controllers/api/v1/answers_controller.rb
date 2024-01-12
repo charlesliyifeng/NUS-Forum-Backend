@@ -114,7 +114,7 @@ class Api::V1::AnswersController < ApplicationController
     end
 
     def jsonapi_include
-      super & ["user"]
+      super & ["user", "comments"]
     end
 
     def jsonapi_serializer_params

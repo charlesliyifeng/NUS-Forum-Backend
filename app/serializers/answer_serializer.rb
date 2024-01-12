@@ -24,6 +24,10 @@ class AnswerSerializer < ApplicationSerializer
     end
   end
 
+  has_many :comments do |answer|
+    answer.comments.order(created_at: :asc)
+  end
+
   belongs_to :user
   belongs_to :question
 end
