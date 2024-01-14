@@ -1,12 +1,12 @@
 databases:
-  - name: nus-forum
-    databaseName: nus-forum
-    user: nus-forum
+  - name: myforum
+    databaseName: myforum
+    user: myforum
     plan: free
 
 services:
   - type: web
-    name: nus-forum
+    name: myforum
     runtime: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"
@@ -15,7 +15,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: nus-forum
+          name: myforum
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
