@@ -10,7 +10,7 @@
 
 user = User.create!(
   name: "Admin",
-  email: "charlesliyifeng@gmail.com",
+  email: "test@gmail.com",
   password: "aA123456789",
 )
 

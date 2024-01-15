@@ -1,16 +1,11 @@
 # NUS-Forum-Backend
 
+First Name: Yifeng  
+Last Name: Li
+
 This is the backend of NUS-Forum.
 
 ## TODO list
-
-### Backend
-- Database
-    - questions
-    - answers
-    - users
-    - comments
-
 - add email verification
 - fix bugs
 
