@@ -7,7 +7,7 @@ module AuthenticateHelper
   def load_current_user
     begin
       request.headers.each do |k,v|
-        puts k + " " + v
+        puts k
       end
       email = JsonWebTokenService.decode(request.headers['HTTP_AUTH_TOKEN'])["email"]
       @current_user = User.find_by(email: email)
