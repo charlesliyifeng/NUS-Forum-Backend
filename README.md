@@ -4,10 +4,12 @@ First Name: Yifeng
 Last Name: Li
 
 This is the backend of NUS-Forum.
+  
+Note: this is the main (development) branch, so you can only run the app in development mode locally with  the frontend in development mode as well.  
 
-## TODO list
-- add email verification
-- fix bugs
+Also note that the development branch uses sqlite, but the production branch uses postgresql.
+
+To see the code for the deployed version, switch to the production branch.
 
 ## Getting Started
 
