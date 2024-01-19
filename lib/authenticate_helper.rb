@@ -9,7 +9,8 @@ module AuthenticateHelper
       puts request.headers["HTTP_AUTH_TOKEN"]
       email = JsonWebTokenService.decode(request.headers["HTTP_AUTH_TOKEN"])["email"]
       @current_user = User.find_by(email: email)
-    rescue JWT::DecodeError
+    rescue JWT::DecodeError => e
+      puts e.message
       puts "############################## no auth_token ####################################"
     else
       puts "############################## user signed in ####################################"
