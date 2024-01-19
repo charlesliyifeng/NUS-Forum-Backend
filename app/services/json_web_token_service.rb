@@ -1,5 +1,5 @@
 class JsonWebTokenService
-  SECRET = "asdhaduewdkasjdnas(&*%$bckasbdKHSAHDKSABDk6871673812"
+  SECRET = ENV['AUTH_TOKEN_SECRET']
   def self.encode(payload, exp = 24.hours.from_now)
     JWT.encode( payload, SECRET, 'HS256' )
   end
