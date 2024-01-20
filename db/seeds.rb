@@ -14,7 +14,7 @@ user = User.create!(
   password: "aA123456789",
 )
 
-1000.times do |i|
+200.times do |i|
   count = rand(0..5)
   question = user.questions.create!(
     title: "test #{i+1}",
